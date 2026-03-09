@@ -5,6 +5,12 @@ files:
     learner_created: false
   - name: test/BullsCowsTest.java
     learner_created: false
+  - name: src/bullscows/Game.java
+    visible: true
+    learner_created: true
 feedback_link: https://hyperskill.org/projects/53/stages/291/implement#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations!
+  time: "Mon, 09 Mar 2026 12:29:01 UTC"
 record: -1
