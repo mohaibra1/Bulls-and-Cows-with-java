@@ -50,9 +50,12 @@ public class Game {
         }
     }
 
+
     //private void playGame(){}
 
     private int[] checkBullsAndCows(String userInput, String secretCode) {
+        //checks how many bulls and cows are in there
+
         int[] answer = new int[2];
         //for loop
         for(int i = 0; i < userInput.length(); i++){
