@@ -34,6 +34,7 @@ public class Game {
     public int[] checkBullsAndCows(String userInput) {
         //checks how many bulls and cows are in there
         int[] answer = new int[2];
+        //for loop
         for(int i = 0; i < userInput.length(); i++){
             if(userInput.charAt(i) == SECRET_CODE.charAt(i)){
                 answer[0] += 1;
