@@ -4,29 +4,25 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Game {
-
+    private Scanner scanner = new Scanner(System.in);
 
     public void start() {
-        Scanner input = new Scanner(System.in);
+
         System.out.println("Please, enter the secret code's length:");
 
         //user input
-        int n = input.nextInt();
-        System.out.println("Input the number of possible symbols in the code:");
-        int strLength = input.nextInt();
-        while(true){
-            if(n > 37){
-                System.out.println("Error: can't generate a secret number with a length of 11 because there aren't enough unique digits.");
-                n = input.nextInt();
-                continue;
-            }else if(strLength > 37) {
-                System.out.println("String length should be less than 26 or equal. not Negative!");
-                strLength = input.nextInt();
-                continue;
-            }else {
-                break;
-            }
+        int n = Integer.parseInt(handleInput());
+        if(n == 0){
+            System.out.println("Error: \"" + n + "\" isn't a valid number.");
+            return;
         }
+        System.out.println("Input the number of possible symbols in the code:");
+        int strLength = Integer.parseInt(handleInput());
+        boolean valid = checkIfLengthValid(n,strLength);
+        if(valid){
+            return;
+        }
+
         System.out.println("Okay, let's start the game!");
         boolean stopGame = true;
         int turns = 1;
@@ -35,34 +31,51 @@ public class Game {
         while(stopGame) {
 
             System.out.println("Turn " +  turns++ + ":");
-            String userInput = input.next();
-            if(userInput.length() > n){
-                System.out.println("Put " + n + " Numbers!");
-                continue;
-            }
+            String userInput = scanner.nextLine();
 
             int[] arr = checkBullsAndCows(userInput, secretCode);
-            int bulls = arr[0];
-            int cows = arr[1];
-            if (bulls == n) {
-                System.out.println("Grade: " + bulls + " bulls.");
-                System.out.println("Congratulations! You guessed the secret code.");
-                break;
-            }else if (bulls > 0 && cows > 0) {
-                System.out.println("Grade: " + bulls + " bull(s) " + cows + " cow(s).");
-            } else if (bulls > 0 && cows == 0) {
-                System.out.println("Grade: " + bulls + " bull(s).");
-            } else if (bulls == 0 && cows > 0) {
-                System.out.println("Grade: " + cows + " cow(s).");
-            } else {
-                System.out.println("Grade: None.");
-            }
-
+            stopGame = checkGame(n, arr);
         }
     }
 
+    private boolean checkGame(int n, int[] arr) {
+        int bulls = arr[0];
+        int cows = arr[1];
+        if (bulls == n) {
+            System.out.println("Grade: " + bulls + " bulls.");
+            System.out.println("Congratulations! You guessed the secret code.");
+            return false;
+        }else if (bulls > 0 && cows > 0) {
+            System.out.println("Grade: " + bulls + " bull(s) " + cows + " cow(s).");
+        } else if (bulls > 0 && cows == 0) {
+            System.out.println("Grade: " + bulls + " bull(s).");
+        } else if (bulls == 0 && cows > 0) {
+            System.out.println("Grade: " + cows + " cow(s).");
+        } else {
+            System.out.println("Grade: None.");
+        }
+        return true;
+    }
 
-    //private void playGame(){}
+    private boolean checkIfLengthValid(int length, int symbols) {
+        if(length > symbols || length <= 0 ){
+            System.out.printf("Error: it's not possible to generate a code with a length of %d with %d unique symbols.", length, symbols);
+            return true;
+        }else if(symbols > 36){
+            System.out.println("Error: maximum number of possible symbols in the code is 36 (0-9, a-z).");
+            return true;
+        }
+        return false;
+    }
+    //handle input
+    private String handleInput() {
+        String input = scanner.nextLine();
+        if (!input.matches("\\d+")) {
+            System.out.println("Error: \"" + input + "\" isn't a valid number.");
+            return "0";
+        }
+        return input;
+    }
 
     private int[] checkBullsAndCows(String userInput, String secretCode) {
         //checks how many bulls and cows are in there
@@ -132,7 +145,6 @@ public class Game {
                     numbers.charAt(numbers.length() - 1) + ", " + chars.charAt(0) + "-" +
                     chars.charAt(chars.length() - 1) + ")");
         }
-        System.out.println(sb);
         return sb.toString().toCharArray();
     }
 }
